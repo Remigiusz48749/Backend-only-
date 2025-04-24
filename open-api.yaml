@@ -1,0 +1,116 @@
+openapi: 3.0.0
+info:
+  title: Shopping List API
+  description: A simple API for managing shopping list items.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+paths:
+  /items:
+    get:
+      summary: Get a list of all shopping list items
+      operationId: getItems
+      tags:
+        - Items
+      responses:
+        "200":
+          description: A list of shopping items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Item"
+    post:
+      summary: Add a new shopping list item
+      operationId: addItem
+      tags:
+        - Items
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Item"
+      responses:
+        "201":
+          description: Shopping item added successfully
+
+  /items/{item_id}:
+    get:
+      summary: Get details of a specific shopping item
+      operationId: getItemById
+      tags:
+        - Items
+      parameters:
+        - name: item_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Details of the shopping item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
+        "404":
+          description: Item not found
+    put:
+      summary: Update a shopping list item
+      operationId: updateItem
+      tags:
+        - Items
+      parameters:
+        - name: item_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Item"
+      responses:
+        "200":
+          description: Shopping item updated successfully
+        "404":
+          description: Item not found
+    delete:
+      summary: Delete a shopping list item
+      operationId: deleteItem
+      tags:
+        - Items
+      parameters:
+        - name: item_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Item deleted successfully
+        "404":
+          description: Item not found
+
+components:
+  schemas:
+    Item:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Bread
+        quantity:
+          type: integer
+          example: 2
+        note:
+          type: string
+          example: Whole grain

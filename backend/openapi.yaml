@@ -1,0 +1,130 @@
+openapi: 3.0.0
+info:
+  description: A simple API for managing shopping list items.
+  title: Shopping List API
+  version: 1.0.0
+servers:
+- description: Local development server
+  url: http://localhost:8000
+paths:
+  /items:
+    get:
+      operationId: getItems
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Item'
+                type: array
+          description: A list of shopping items
+      summary: Get a list of all shopping list items
+      tags:
+      - Items
+    post:
+      operationId: addItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+        required: true
+      responses:
+        "201":
+          description: Shopping item added successfully
+      summary: Add a new shopping list item
+      tags:
+      - Items
+  /items/{item_id}:
+    delete:
+      operationId: deleteItem
+      parameters:
+      - explode: false
+        in: path
+        name: item_id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: Item deleted successfully
+        "404":
+          description: Item not found
+      summary: Delete a shopping list item
+      tags:
+      - Items
+    get:
+      operationId: getItemById
+      parameters:
+      - explode: false
+        in: path
+        name: item_id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+          description: Details of the shopping item
+        "404":
+          description: Item not found
+      summary: Get details of a specific shopping item
+      tags:
+      - Items
+    put:
+      operationId: updateItem
+      parameters:
+      - explode: false
+        in: path
+        name: item_id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+        required: true
+      responses:
+        "200":
+          description: Shopping item updated successfully
+        "404":
+          description: Item not found
+      summary: Update a shopping list item
+      tags:
+      - Items
+components:
+  schemas:
+    Item:
+      example:
+        note: Whole grain
+        quantity: 2
+        name: Bread
+        id: 1
+      properties:
+        id:
+          example: 1
+          title: id
+          type: integer
+        name:
+          example: Bread
+          title: name
+          type: string
+        quantity:
+          example: 2
+          title: quantity
+          type: integer
+        note:
+          example: Whole grain
+          title: note
+          type: string
+      title: Item
+      type: object
